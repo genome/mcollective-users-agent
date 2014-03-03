@@ -17,7 +17,12 @@ action "list", :description => "List Users" do
           :optional    => true,
           :maxlength    => 50
 
+
+    output :userlist,
+          :description => "User List",
+          :display_as => "The User List"
+
     summarize do
-      aggregate user_summary(:userlist)
+      aggregate summary(:userlist)
     end
 end
