@@ -1,3 +1,4 @@
 Gemfile.lock
 ext/packaging
 bundles
+.bundle
