@@ -1,0 +1,72 @@
+# VERSION is subbed out during rake srpm process
+%global realversion <%= @version %>
+%global rpmversion <%= @rpmversion %>
+
+Summary:   Examine active users
+Name:      mcollective-users
+Version:   %{rpmversion}
+Release:   <%= @rpmrelease -%>%{?dist}
+Vendor:    %{?_host_vendor}
+License:   ASL 2.0
+URL:       https://github.com/puppetlabs/mcollective-users-agent
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch: noarch
+Group:     System Tools
+Source0:   mcollective-users-%{realversion}.tar.gz
+
+%description
+Examine active users
+
+%prep
+%setup -q  -n %{name}-%{realversion}
+
+%build
+
+%install
+rm -rf %{buildroot}
+%{__install} -d -m0755 %{buildroot}%{_libexecdir}/mcollective/mcollective
+cp -a agent application util %{buildroot}%{_libexecdir}/mcollective/mcollective
+
+%clean
+rm -rf %{buildroot}
+
+%package agent
+Requires: mcollective-users-common = %{version}-%{release}
+Group: System Tools
+Summary:   Examine active users
+
+%package client
+Requires: mcollective-process-common = %{version}-%{release}
+Group: System Tools
+Summary:   Examine active users
+
+%package common
+Requires: mcollective-common >= 2.2.1
+Group: System Tools
+Summary:   Examine active users
+
+%description agent
+Inspect running users
+
+%description client
+Inspect running users
+
+%description common
+Inspect running users
+
+%files agent
+%{_libexecdir}/mcollective/mcollective/agent/*.rb
+%{_libexecdir}/mcollective/mcollective/data/*.ddl
+
+%files client
+%{_libexecdir}/mcollective/mcollective/aggregate/*
+%{_libexecdir}/mcollective/mcollective/application/*.rb
+%{_libexecdir}/mcollective/mcollective/data/*.ddl
+
+%files common
+%{_libexecdir}/mcollective/mcollective/agent/*.ddl
+%{_libexecdir}/mcollective/mcollective/util/*
+
+%changelog
+* <%= Time.now.strftime("%a %b %d %Y") %> Puppet Labs Release <info@puppetlabs.com> -  <%= @rpmversion %>-<%= @rpmrelease %>
+- Build for <%= @version %>
